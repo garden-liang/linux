@@ -232,6 +232,15 @@ static void __init do_mellanox_setup(void)
 	writel(reg, AST_IO(AST_BASE_SCU | 0x48));
 }
 
+static void __init do_atca_setup(void)
+{
+	do_common_setup();
+
+	/* Setup PNOR address mapping for 64M flash */
+	writel(0x30000C00, AST_IO(AST_BASE_LPC | 0x88));
+	writel(0xFC0003FF, AST_IO(AST_BASE_LPC | 0x8C));
+}
+
 #define SCU_PASSWORD	0x1688A8A8
 
 static void __init aspeed_init_early(void)
@@ -284,6 +293,8 @@ static void __init aspeed_init_early(void)
 		do_lanyang_setup();
 	if (of_machine_is_compatible("mellanox,msn-bmc"))
 		do_mellanox_setup();
+	if (of_machine_is_compatible("prophet,atca-bmc"))
+		do_atca_setup();
 }
 
 static void __init aspeed_map_io(void)
