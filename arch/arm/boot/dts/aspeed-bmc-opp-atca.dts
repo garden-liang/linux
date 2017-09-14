@@ -81,15 +81,25 @@
 	};
 };
 
-&pinctrl {
+/*&pinctrl {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_flbusy_default &pinctrl_flwp_default
 
 			&pinctrl_vgahs_default &pinctrl_vgavs_default
 			&pinctrl_ddcclk_default &pinctrl_ddcdat_default>;
-};
+};*/
 
 &mac0 {
+	status = "okay";
+
+	use-ncsi;
+	no-hw-checksum;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_rmii1_default>;
+};
+
+&mac1 {
 	status = "okay";
 
 	use-ncsi;
@@ -150,8 +160,8 @@
 &i2c3 {
 	status = "okay";
 
-	occ@50 {
-		compatible = "ibm,occ-i2c";
+	occ-hwmon@50 {
+		compatible = "ibm,p8-occ-hwmon";
 		reg = <0x50>;
 	};
 };
@@ -173,6 +183,20 @@
 };
 
 &gpio {
+	pin_gpio_d4 {
+		gpio-hog;
+		gpios = <ASPEED_GPIO(D, 4) GPIO_ACTIVE_HIGH>;
+		output-low;
+		/*output-high;*/
+		line-name = "APSS_BOOT_MODE";
+	};
+	
+	pin_gpio_g7 {
+		gpio-hog;
+		gpios = <ASPEED_GPIO(G, 7) GPIO_ACTIVE_HIGH>;
+		output-high;
+		line-name = "APSS_RESET_N";
+	};
 
 	pin_gpio_h6 {
 		gpio-hog;
